@@ -7,10 +7,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.lsimanenka.coderefactor4.R
 import com.lsimanenka.coderefactor4.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -35,8 +35,24 @@ class MainActivity : AppCompatActivity() {
     private fun observeViewModel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.users.collect {
-                    adapter.submitList(it)
+                viewModel.state.collect {state ->
+                    when (state) {
+                        is UserState.Loading -> {
+                            binding.progressBar.isVisible = true
+                            binding.errorTextView.isVisible = false
+                        }
+                        is UserState.Success -> {
+                            binding.progressBar.isVisible = false
+                            adapter.submitList(state.users)
+                        }
+                        is UserState.Error -> {
+                            binding.progressBar.isVisible = false
+                            adapter.submitList(emptyList())
+                            binding.errorTextView.isVisible = true
+                            binding.errorTextView.text = "Ошибка: ${state.exception.message}"
+                            // Или можно показать Snackbar / Toast
+                        }
+                    }
                 }
             }
         }
