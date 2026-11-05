@@ -12,13 +12,17 @@ import kotlinx.coroutines.launch
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.jvm.java
 
-
+//TODO 5: Why not a separate Activity?
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: UserViewModel by viewModels()
+    //TODO 2: Check google guideline for viewBinding
     private lateinit var binding : ActivityMainBinding
+
+    //TODO 6: Why remove lazy?
     private val adapter : UserAdapter = UserAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +53,7 @@ class MainActivity : AppCompatActivity() {
                             binding.progressBar.isVisible = false
                             adapter.submitList(emptyList())
                             binding.errorTextView.isVisible = true
+                            //TODO 3: All resources in strings.xml
                             binding.errorTextView.text = "Ошибка: ${state.exception.message}"
                             // Или можно показать Snackbar / Toast
                         }
@@ -62,6 +67,7 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
 
+        //TODO 7: What will you do, if I want migrate this to Fragments (theoretically)
         binding.button.setOnClickListener {
             val intent = Intent(this@MainActivity, DetailActivity::class.java)
             intent.putExtra(EXTRA_USER_NAME, "John Doe2")

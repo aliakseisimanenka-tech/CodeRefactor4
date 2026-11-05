@@ -10,6 +10,7 @@ class DetailActivity() : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
+        //TODO 1: Why use findViewById not binding?
         val tvDetailName = findViewById<TextView>(R.id.tv_detail_name)
         val userName = intent.getStringExtra(MainActivity.EXTRA_USER_NAME)
         if (userName != null) {

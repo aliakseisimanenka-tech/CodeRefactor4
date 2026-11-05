@@ -14,6 +14,7 @@ class UserAdapter : ListAdapter<User, UserViewHolder>(UserDiffCallback()) {
         parent: ViewGroup,
         viewType: Int
     ): UserViewHolder {
+        //TODO 4: also can be used with binding
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_user, parent, false)
         return UserViewHolder(view)
     }
@@ -44,4 +45,8 @@ class UserDiffCallback : DiffUtil.ItemCallback<User>() {
 
 class UserViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
     val title : TextView = itemView.findViewById<TextView>(R.id.userName)
+    //also can create as:
+    // fun bind(user: User){
+    //  title.text = user.name
+    // }
 }
